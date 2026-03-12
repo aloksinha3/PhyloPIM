@@ -20,12 +20,12 @@ Improvements over run_scalop_cdr.py
 
 Usage
 -----
-  python scalop.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python
-  python scalop.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python \\
+  python extract_cdrs.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python
+  python extract_cdrs.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python \\
       --out cluster_assignments_CDR.csv
-  python scalop.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python \\
+  python extract_cdrs.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python \\
       --ground-truth V3_mAb_NSEM_CDR.xlsx
-  python scalop.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python \\
+  python extract_cdrs.py --csv cluster_assignments.csv --scalop /path/to/SCALOP/lib/python \\
       --ncpu 4
 """
 
@@ -56,18 +56,25 @@ DEFINITION = "north"
 # SCALOP helpers
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _import_scalop(scalop_path: str):
-    """Add SCALOP to sys.path and import; raise clearly if not found."""
-    if scalop_path not in sys.path:
+def _import_scalop(scalop_path: str = None):
+    """
+    Import SCALOP. Two modes:
+      1. scalop_path=None  — use the already pip-installed scalop package
+                             (works after: pip install ./SCALOP/)
+      2. scalop_path=str   — inject path into sys.path first, then import
+                             (only needed if scalop was NOT pip-installed)
+    """
+    if scalop_path and scalop_path not in sys.path:
         sys.path.insert(0, scalop_path)
     try:
         from scalop.anarci import run_anarci
         from scalop.utils import getnumberedCDRloop
         return run_anarci, getnumberedCDRloop
     except ImportError as e:
+        hint = f"from '{scalop_path}'" if scalop_path else "from the installed environment"
         raise ImportError(
-            f"Could not import SCALOP from '{scalop_path}'.\n"
-            f"Make sure the path points to the SCALOP lib/python directory.\n"
+            f"Could not import SCALOP {hint}.\n"
+            f"Fix: activate your conda env and run:  pip install ./SCALOP/\n"
             f"Original error: {e}"
         )
 

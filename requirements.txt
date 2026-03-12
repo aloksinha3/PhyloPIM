@@ -1,0 +1,38 @@
+# HVTN300 V3 mAb Representative Selection Pipeline
+# =================================================
+# Create and activate the environment:
+#
+#   conda create -n hvtn300 python=3.10 -y
+#   conda activate hvtn300
+#   conda install -c bioconda -c conda-forge --file requirements.txt -y
+#
+# Then install SCALOP (from the local clone in this folder):
+#
+#   pip install ./SCALOP/
+#
+# Verify everything is available:
+#
+#   python -c "from Bio import Phylo; print('biopython OK')"
+#   clustalo --version
+#   python -c "from scalop.predict import assign; print('SCALOP OK')"
+
+# ── Core scientific stack ─────────────────────────────────────────────────
+numpy>=1.24
+pandas>=2.0
+scipy>=1.11
+biopython>=1.81
+openpyxl>=3.1          # read/write .xlsx
+matplotlib>=3.7        # tree PNG rendering
+
+# ── Sequence alignment ────────────────────────────────────────────────────
+# clustalo (Clustal Omega) binary — required for PIM step
+clustalo>=1.2          # bioconda channel
+
+# ── SCALOP dependencies (also installed when you pip install ./SCALOP/) ──
+hmmer>=3.3             # bioconda channel — ANARCI numbering backend
+
+# ── HTTP (EBI REST API calls) ─────────────────────────────────────────────
+requests>=2.31
+
+# ── Standard library only below this line (no install needed) ─────────────
+# argparse, subprocess, tempfile, pathlib, logging, re, copy, concurrent.futures
