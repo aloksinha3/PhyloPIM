@@ -47,7 +47,7 @@ python main.py \
   --out results/
 ```
 
-`--k` sets the number of clusters. If omitted, the pipeline auto-detects k from the largest gap in the UPGMA merge depths, which may not always match the visual groupings in the tree
+`--k` sets the number of clusters. If omitted, the pipeline auto-detects k from the largest gap in the UPGMA merge depths, which may not always match the visual groupings in the tree. After running, it is recommended to inspect results/tree.png and, manually, set k, explicitly.
 
 ### Resume from a later step
 
