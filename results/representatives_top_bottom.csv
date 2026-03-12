@@ -1,5 +1,0 @@
-Cluster,Rank,Seq_ID,Avg_%_Identity,CDR_length,Selection
-1,1,Sequence_14,43.501243,64,highest
-1,80,Sequence_82,26.47322418987342,74,lowest
-2,1,Sequence_30,41.73484340909091,77,highest
-2,23,Sequence_101,30.66666654545455,75,lowest

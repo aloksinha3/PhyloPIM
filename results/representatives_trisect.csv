@@ -1,9 +1,0 @@
-Cluster,Rank,Seq_ID,Avg_%_Identity,CDR_length,Selection
-1,1,Sequence_14,43.501243,64,trisect_1_of_4
-1,27,Sequence_98,37.55092494936709,68,trisect_2_of_4
-1,54,Sequence_88,34.56933658227848,64,trisect_3_of_4
-1,80,Sequence_82,26.47322418987342,74,trisect_4_of_4
-2,1,Sequence_30,41.73484340909091,77,trisect_1_of_4
-2,8,Sequence_41,39.185008090909086,76,trisect_2_of_4
-2,16,Sequence_24,35.939393863636376,75,trisect_3_of_4
-2,23,Sequence_101,30.66666654545455,75,trisect_4_of_4
