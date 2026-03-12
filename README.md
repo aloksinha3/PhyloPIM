@@ -2,6 +2,8 @@ Clone onto Desktop
 cd Desktop
 git clone https://github.com/aloksinha3/PhyloPIM.git
 
+Install SCALOP:
+
 Conda environment activation
 
 conda create -n PhyloPIM python=3.10 -y
