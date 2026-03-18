@@ -42,6 +42,11 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
+# Suppress SSL verification warnings that appear when verify=False is used.
+# This is necessary on institutional networks with corporate SSL proxies.
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 CLUSTALO_URL     = "https://www.ebi.ac.uk/Tools/services/rest/clustalo"
 PHYLOGENY_URL    = "https://www.ebi.ac.uk/Tools/services/rest/simple_phylogeny"
 POLL_INTERVAL    = 5     # seconds between status polls
@@ -54,7 +59,7 @@ MAX_WAIT_SECONDS = 900   # 15 min hard ceiling per job
 
 def _submit(base_url: str, params: dict) -> str:
     """POST to /run; return the plain-text job ID or raise with full response body."""
-    resp = requests.post(f"{base_url}/run", data=params, timeout=30)
+    resp = requests.post(f"{base_url}/run", data=params, timeout=30, verify=False)
     if not resp.ok:
         raise RuntimeError(
             f"HTTP {resp.status_code} from {base_url}/run\n"
@@ -75,7 +80,7 @@ def _wait(base_url: str, job_id: str) -> None:
     url      = f"{base_url}/status/{job_id}"
     deadline = time.time() + MAX_WAIT_SECONDS
     while time.time() < deadline:
-        resp   = requests.get(url, timeout=15)
+        resp   = requests.get(url, timeout=15, verify=False)
         resp.raise_for_status()
         status = resp.text.strip()
         log.info("  status: %s", status)
@@ -89,7 +94,7 @@ def _wait(base_url: str, job_id: str) -> None:
 
 def _result(base_url: str, job_id: str, result_type: str) -> str:
     """Fetch a named result for a finished job."""
-    resp = requests.get(f"{base_url}/result/{job_id}/{result_type}", timeout=60)
+    resp = requests.get(f"{base_url}/result/{job_id}/{result_type}", timeout=60, verify=False)
     resp.raise_for_status()
     return resp.text
 
@@ -106,7 +111,7 @@ def list_phylogeny_params() -> None:
     """
     import xml.etree.ElementTree as ET
 
-    resp = requests.get(f"{PHYLOGENY_URL}/parameters", timeout=20)
+    resp = requests.get(f"{PHYLOGENY_URL}/parameters", timeout=20, verify=False)
     resp.raise_for_status()
     root = ET.fromstring(resp.text)
     param_ids = [el.text for el in root.findall("id") if el.text]
@@ -116,7 +121,7 @@ def list_phylogeny_params() -> None:
     print(f"  {'-'*16} {'-'*14} {'-'*44}")
 
     for pid in param_ids:
-        d_resp = requests.get(f"{PHYLOGENY_URL}/parameterdetails/{pid}", timeout=20)
+        d_resp = requests.get(f"{PHYLOGENY_URL}/parameterdetails/{pid}", timeout=20, verify=False)
         d_resp.raise_for_status()
         d = ET.fromstring(d_resp.text)
 
